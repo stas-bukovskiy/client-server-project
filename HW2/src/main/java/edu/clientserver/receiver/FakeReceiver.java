@@ -16,7 +16,6 @@ public class FakeReceiver implements Receiver {
     private final BlockingQueue<byte[]> requestBytesQueue;
 
     public FakeReceiver(BlockingQueue<byte[]> requestBytesQueue) {
-
         this.requestBytesQueue = requestBytesQueue;
         clientId = UserIdProvider.get().provide();
         encryptor = new EncryptorImpl();

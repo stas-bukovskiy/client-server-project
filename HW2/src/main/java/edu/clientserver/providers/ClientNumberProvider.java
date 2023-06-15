@@ -1,7 +1,10 @@
 package edu.clientserver.providers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ClientNumberProvider implements Provider<Byte> {
 
@@ -9,12 +12,12 @@ public class ClientNumberProvider implements Provider<Byte> {
     private static ClientNumberProvider instance;
 
     private final List<Byte> clientNumbers;
-    private byte index;
+    private AtomicInteger index;
 
 
     private ClientNumberProvider() {
-        clientNumbers = new ArrayList<>();
-        index = INITIAL_VALUE;
+        clientNumbers = Collections.synchronizedList(new ArrayList<>());
+        index = new AtomicInteger(INITIAL_VALUE);
     }
 
 
@@ -25,13 +28,13 @@ public class ClientNumberProvider implements Provider<Byte> {
     }
 
     @Override
-    public Byte provide() {
-        clientNumbers.add(index);
-        return index++;
+    public synchronized Byte provide() {
+        clientNumbers.add((byte) index.get());
+        return (byte) index.getAndIncrement();
     }
 
     @Override
-    public boolean validate(Byte clientNumber) {
+    public synchronized boolean validate(Byte clientNumber) {
         return clientNumbers.contains(clientNumber);
     }
 

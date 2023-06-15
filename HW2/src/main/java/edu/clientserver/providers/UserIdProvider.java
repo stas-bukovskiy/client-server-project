@@ -27,13 +27,13 @@ public class UserIdProvider implements Provider<Integer> {
     }
 
     @Override
-    public Integer provide() {
+    public synchronized Integer provide() {
         userIds.add(index.get());
         return index.getAndIncrement();
     }
 
     @Override
-    public boolean validate(Integer userId) {
+    public synchronized boolean validate(Integer userId) {
         return userIds.contains(userId);
     }
 
