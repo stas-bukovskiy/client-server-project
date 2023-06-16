@@ -28,6 +28,16 @@ public class DecryptorImpl implements Decryptor {
 
     @Override
     public void decrypt(byte[] messageBytes) {
+        Message messageObj = decryptMessage(messageBytes);
+        try {
+            requestObjQueue.put(messageObj);
+            log.info("send encrypted message via requestObjQueue");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Message decryptMessage(byte[] messageBytes) {
         validate(messageBytes);
 
         int commandCode = getCommandCode(messageBytes);
@@ -36,13 +46,7 @@ public class DecryptorImpl implements Decryptor {
 
         Message messageObj = new Message(commandCode, userId, msg);
         log.info("decrypted bytes to message: <{}>", messageObj);
-
-        try {
-            requestObjQueue.put(messageObj);
-            log.info("send encrypted message via requestObjQueue");
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        return messageObj;
     }
 
     private void validate(byte[] bytes) {
@@ -64,8 +68,9 @@ public class DecryptorImpl implements Decryptor {
         if (bytes[PACKAGE_START_OFFSET] != 0x13)
             throw new IllegalArgumentException("Invalid package start: expected <13h>, but actual <" + bytes[PACKAGE_START_OFFSET] + ">");
 
-        if (isClientNumberInvalid(bytes[CLIENT_NUMBER_OFFSET]))
-            throw new IllegalArgumentException("Invalid client number");
+        // todo: check
+//        if (isClientNumberInvalid(bytes[CLIENT_NUMBER_OFFSET]))
+//            throw new IllegalArgumentException("Invalid client number");
 
         long messageNumber = bytesToLong(bytes, MESSAGE_NUMBER_OFFSET);
 //        if (isMessageNumberInvalid(messageNumber))
