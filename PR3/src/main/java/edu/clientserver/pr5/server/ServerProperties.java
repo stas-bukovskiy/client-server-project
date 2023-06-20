@@ -1,4 +1,4 @@
-package edu.clientserver.server;
+package edu.clientserver.pr5.server;
 
 public final class ServerProperties {
 

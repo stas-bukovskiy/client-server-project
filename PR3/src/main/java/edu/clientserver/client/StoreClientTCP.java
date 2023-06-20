@@ -4,8 +4,8 @@ import edu.clientserver.decryptor.DecryptorImpl;
 import edu.clientserver.encryptor.Encryptor;
 import edu.clientserver.encryptor.EncryptorImpl;
 import edu.clientserver.message.Message;
+import edu.clientserver.pr5.server.ServerProperties;
 import edu.clientserver.providers.ClientNumberProvider;
-import edu.clientserver.server.ServerProperties;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
