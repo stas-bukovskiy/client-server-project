@@ -1,0 +1,152 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+.list-group-item {
+  background-color: #f7f7f7;
+}
+
+.btn {
+  text-decoration: none;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #FCA311;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #e2940d;
+}
+
+.btn-success {
+  background-color: #8ea604;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background-color: #778b04;
+}
+
+.btn-primary:checked {
+  background-color: #e2940d;
+}
+
+.btn-secondary {
+  background-color: #14213D;
+  transition: background-color 0.5s;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: #0A111F;
+  transition: background-color 0.5s;
+  color: #fff;
+}
+
+.btn-danger {
+  background-color: #69140E;
+  transition: background-color 0.5s;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #480e09;
+  transition: background-color 0.5s;
+  color: #fff;
+}
+
+
+.btn-primary:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.container {
+  min-height: 85vh;
+  margin-left: 100px;
+  margin-right: 40px;
+  margin-top: 40px;
+  padding: 30px;
+  background-color: #FFFFFF;
+  border: 2px solid #E5E5E5;
+  border-radius: 30px;
+}
+
+.card {
+  background-color: #f7f7f7;
+  justify-content: space-between;
+  border: 0;
+  margin-bottom: 10px;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card:hover {
+  background-color: #ececec;
+  transition: background-color 0.5s;
+}
+
+.link {
+  color: black;
+  text-decoration: none;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.create-group-container {
+  width: 500px;
+  padding: 30px;
+  background-color: #f7f7f7;
+  border-radius: 30px;
+  color: #14213D;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+

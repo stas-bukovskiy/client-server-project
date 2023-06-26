@@ -1,0 +1,22 @@
+.group-link {
+    text-decoration: none;
+    color: #000;
+}
+
+.group-info {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.group-actions {
+    display: flex;
+    align-items: center;
+}
+
+.group-actions .btn {
+    margin-right: 10px;
+}
+
+
+/* Additional styles for customization */
+/* Update the styles as per your requirements */

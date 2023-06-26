@@ -1,0 +1,27 @@
+.circle-button {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    width: 60px;
+    height: 60px;
+    background-color: #FCA311;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color, color 0.5s;
+}
+
+.circle-button:hover {
+    background-color: #E5E5E5;
+    color: #212121;
+}
+
+.plus-icon {
+    margin-top: 2px;
+}

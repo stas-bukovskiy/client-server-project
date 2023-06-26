@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.good-storage'
+version = '1.0-SNAPSHOT'
+
+ext {
+    javaMainClass = "org.goodstorage.Main"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.awaitility:awaitility:4.2.0'
+    testImplementation "org.testcontainers:postgresql:1.18.3"
+    testImplementation "org.testcontainers:junit-jupiter:1.18.3"
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.4.0'
+    testImplementation 'org.mockito:mockito-core:5.4.0'
+
+    implementation 'com.zaxxer:HikariCP:5.0.1'
+
+    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'ch.qos.logback:logback-classic:1.2.9'
+
+    implementation "io.jsonwebtoken:jjwt-api:0.11.5"
+    runtimeOnly "io.jsonwebtoken:jjwt-impl:0.11.5"
+    runtimeOnly "io.jsonwebtoken:jjwt-gson:0.11.5"
+
+    implementation 'org.postgresql:postgresql:42.2.27'
+
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    implementation 'commons-codec:commons-codec:1.15'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.register('run', JavaExec) {
+    group = "Execution"
+    classpath = sourceSets.main.runtimeClasspath
+    main = javaMainClass
+}
