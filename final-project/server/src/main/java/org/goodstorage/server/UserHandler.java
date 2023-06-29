@@ -81,7 +81,7 @@ public class UserHandler implements HttpHandler {
     }
 
     private void handleGetUserById(HttpExchange exchange, String id, User currentUser) throws IOException {
-        if (!currentUser.getRole().equals("ADMIN") || !currentUser.getId().equals(id))
+        if (!currentUser.getRole().equals("ADMIN") || currentUser.getId().equals(id))
             throw new ResponseStatusException(403, "Only admin can get information about user");
 
         User user = userService.getById(id);

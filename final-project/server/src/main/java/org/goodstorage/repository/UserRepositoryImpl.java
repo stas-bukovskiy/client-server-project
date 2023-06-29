@@ -83,6 +83,23 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public boolean existsByUsernameAndIdIsNot(String username, String id) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM \"User\" WHERE username = ? AND id != ?");
+            statement.setString(1, username);
+            statement.setObject(2, UUID.fromString(id));
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            return count > 0;
+        } catch (SQLException e) {
+            log.error("Error occurred while user existing check by username and id <{}>:", username, e);
+            throw new DatabaseException(e);
+        }
+
+    }
+
+    @Override
     public Optional<User> findByUsername(String username) {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM \"User\" WHERE username = ?");

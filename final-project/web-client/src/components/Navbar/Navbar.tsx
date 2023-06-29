@@ -1,6 +1,6 @@
 import React from 'react';
 import {Nav, OverlayTrigger, Tooltip} from 'react-bootstrap';
-import {BsBagFill, BsGrid, BsSearch} from 'react-icons/bs';
+import {BsBagFill, BsGrid, BsPerson, BsSearch} from 'react-icons/bs';
 import './Navbar.css';
 import {RiLoginBoxFill, RiLogoutBoxFill} from "react-icons/ri";
 import {useNavigate} from "react-router-dom";
@@ -16,6 +16,16 @@ const Navbar: React.FC = () => {
         <div className="navbar-wrapper">
             <Nav className="navbar">
                 {token ? <>
+                    <Nav.Item>
+                        <OverlayTrigger
+                            placement="right"
+                            overlay={<Tooltip id="tooltip-users">Users</Tooltip>}
+                        >
+                            <Nav.Link href="/users">
+                                <BsPerson/>
+                            </Nav.Link>
+                        </OverlayTrigger>
+                    </Nav.Item>
                     <Nav.Item>
                         <OverlayTrigger
                             placement="right"

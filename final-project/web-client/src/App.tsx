@@ -10,6 +10,9 @@ import CreateGood from "./components/Good/CreateGood.tsx";
 import EditGood from "./components/Good/EditGood.tsx";
 import SearchPage from "./components/Search/SearchPage.tsx";
 import GoodsPage from "./components/Good/GoodsPage.tsx";
+import UserComponent from "./components/User/UsersPage.tsx";
+import CreateUser from "./components/User/CreateUser.tsx";
+import EditUser from "./components/User/EditUser.tsx";
 
 function App() {
     return (
@@ -26,6 +29,10 @@ function App() {
                 <Route path="/goods/create/:groupId" element={<CreateGood/>}/>
                 <Route path="/search" element={<SearchPage/>}/>
                 <Route path="/goods" element={<GoodsPage/>}/>
+
+                <Route path="/users" element={<UserComponent/>}/>
+                <Route path="/users/create" element={<CreateUser/>}/>
+                <Route path="/users/edit/:id" element={<EditUser/>}/>
             </Routes>
         </BrowserRouter>
     );

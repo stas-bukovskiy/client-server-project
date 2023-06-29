@@ -32,12 +32,14 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AlreadyExistException("User already exists with username <%s>", request.getFullName());
 
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         User userToCreate = User.builder()
                 .fullName(request.getFullName())
                 .username(request.getUsername())
                 .password(request.getPassword())
                 .role(request.getRole().toUpperCase())
-                .createdAt(new Timestamp(System.currentTimeMillis()))
+                .createdAt(currentTimestamp)
+                .updatedAt(currentTimestamp)
                 .build();
 
         User createdUser = userRepository.save(userToCreate);
@@ -47,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(String id, UpdateUserRequest request) {
-        if (userRepository.existsByUsername(request.getUsername()))
+        if (userRepository.existsByUsernameAndIdIsNot(request.getUsername(), id))
             throw new AlreadyExistException("User already exists with username <%s>", request.getFullName());
 
         User userToUpdate = userRepository.findById(id)
@@ -55,6 +57,7 @@ public class UserServiceImpl implements UserService {
         userToUpdate.setFullName(request.getFullName());
         userToUpdate.setUsername(request.getUsername());
         userToUpdate.setPassword(request.getPassword());
+        userToUpdate.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
         User uptededUser = userRepository.update(userToUpdate);
         log.info("Updated user <{}> from request <{}>", uptededUser, request);
@@ -63,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(String id) {
-        if (userRepository.existsById(id))
+        if (!userRepository.existsById(id))
             throw new NotFoundException("user", id);
 
         userRepository.delete(id);
