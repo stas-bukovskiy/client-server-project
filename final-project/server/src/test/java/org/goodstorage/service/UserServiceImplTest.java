@@ -88,10 +88,10 @@ class UserServiceImplTest {
         request.setPassword(RandomUtil.randomString(10));
         request.setFullName(RandomUtil.randomString(10));
 
-        when(userRepository.existsByUsername(request.getUsername())).thenReturn(true);
+        when(userRepository.existsByUsernameAndIdIsNot(request.getUsername(), userId)).thenReturn(true);
 
         assertThrows(AlreadyExistException.class, () -> userService.update(userId, request));
-        verify(userRepository).existsByUsername(request.getUsername());
+        verify(userRepository).existsByUsernameAndIdIsNot(request.getUsername(), userId);
         verify(userRepository, never()).findById(userId);
         verify(userRepository, never()).update(any(User.class));
     }
@@ -104,12 +104,12 @@ class UserServiceImplTest {
         request.setPassword(RandomUtil.randomString(10));
         request.setFullName(RandomUtil.randomString(10));
 
-        when(userRepository.existsByUsername(request.getUsername())).thenReturn(false);
+        when(userRepository.existsByUsernameAndIdIsNot(request.getUsername(), userId)).thenReturn(false);
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // Act and Assert
         assertThrows(NotFoundException.class, () -> userService.update(userId, request));
-        verify(userRepository).existsByUsername(request.getUsername());
+        verify(userRepository).existsByUsernameAndIdIsNot(request.getUsername(), userId);
         verify(userRepository).findById(userId);
         verify(userRepository, never()).update(any(User.class));
     }
@@ -118,7 +118,7 @@ class UserServiceImplTest {
     void delete_ExistingId_ShouldDeleteUser() {
         String userId = UUID.randomUUID().toString();
 
-        when(userRepository.existsById(userId)).thenReturn(false);
+        when(userRepository.existsById(userId)).thenReturn(true);
         userService.delete(userId);
 
         verify(userRepository).existsById(userId);
@@ -129,7 +129,7 @@ class UserServiceImplTest {
     void delete_NonExistingId_ShouldThrowNotFoundException() {
         String userId = UUID.randomUUID().toString();
 
-        when(userRepository.existsById(userId)).thenReturn(true);
+        when(userRepository.existsById(userId)).thenReturn(false);
 
         assertThrows(NotFoundException.class, () -> userService.delete(userId));
         verify(userRepository).existsById(userId);

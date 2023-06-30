@@ -5,7 +5,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import lombok.RequiredArgsConstructor;
 import org.goodstorage.auth.AuthenticationManager;
-import org.goodstorage.domain.Group;
 import org.goodstorage.exceptions.ResponseStatusException;
 import org.goodstorage.exceptions.ValidationException;
 import org.goodstorage.service.GroupService;
@@ -74,26 +73,26 @@ public class GroupHandler implements HttpHandler {
     }
 
     private void handleGetAllGroups(HttpExchange exchange) throws IOException {
-        List<Group> groups = groupService.getGroups();
+        List<GroupService.GroupResponse> groups = groupService.getGroupResponses();
         String responseJson = gson.toJson(groups);
         sendResponse(exchange, 200, responseJson);
     }
 
     private void handleSearchByExpression(HttpExchange exchange, String expression) throws IOException {
-        List<Group> groups = groupService.searchGroups(expression);
+        List<GroupService.GroupResponse> groups = groupService.searchGroupResponses(expression);
         String responseJson = gson.toJson(groups);
         sendResponse(exchange, 200, responseJson);
     }
 
     private void handleGetGroupById(HttpExchange exchange, String id) throws IOException {
-        Group group = groupService.getById(id);
+        GroupService.GroupResponse group = groupService.getGroupResponseById(id);
         String responseJson = gson.toJson(group);
         sendResponse(exchange, 200, responseJson);
     }
 
     private void handlePostNewGroup(HttpExchange exchange) throws IOException {
         GroupService.GroupRequest request = getValidGroupRequestFromBody(exchange);
-        Group createdGroup = groupService.create(request);
+        GroupService.GroupResponse createdGroup = groupService.create(request);
         sendResponse(exchange, 201, gson.toJson(createdGroup));
     }
 
@@ -109,7 +108,7 @@ public class GroupHandler implements HttpHandler {
 
     private void handlePutExistingGroup(HttpExchange exchange, String id) throws IOException {
         GroupService.GroupRequest request = getValidGroupRequestFromBody(exchange);
-        Group updatedGroup = groupService.update(id, request);
+        GroupService.GroupResponse updatedGroup = groupService.update(id, request);
         sendResponse(exchange, 200, gson.toJson(updatedGroup));
     }
 

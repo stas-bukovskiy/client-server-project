@@ -2,6 +2,7 @@ package org.goodstorage.repository;
 
 import org.goodstorage.domain.Good;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,4 +30,8 @@ public interface GoodRepository {
     void addQuantity(String id, int quantityToAdd);
 
     void writeOffQuantity(String id, int quantityToWriteOff);
+
+    int countProductsByGroupId(String groupId);
+
+    BigDecimal sumProductsPriceByGroupId(String groupId);
 }

@@ -6,6 +6,8 @@ type GroupCardProps = {
         id: string;
         name: string;
         description: string;
+        productsCounts: number;
+        productsPrice: number;
         createdAt: Date;
         updatedAt: Date;
     };
@@ -21,6 +23,13 @@ const GroupCardComponent: React.FC<GroupCardProps> = ({group, handleDelete}) => 
                     <h5 className="card-title">{group.name}</h5>
                     <p className="card-text">
                         {group.description}
+                    </p>
+                    <hr/>
+                    <p className="card-text">
+                        Number of products: <strong>{group.productsCounts}</strong>
+                    </p>
+                    <p className="card-text">
+                        Overall price: <strong>{group.productsPrice}</strong>
                     </p>
                     <hr/>
                     <p className="card-text">

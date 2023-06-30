@@ -3,6 +3,7 @@ package org.goodstorage.service;
 import org.goodstorage.domain.Group;
 import org.goodstorage.exceptions.AlreadyExistException;
 import org.goodstorage.exceptions.NotFoundException;
+import org.goodstorage.repository.GoodRepository;
 import org.goodstorage.repository.GroupRepository;
 import org.goodstorage.util.RandomUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,11 +25,19 @@ class GroupServiceImplTest {
 
     @Mock
     private GroupRepository groupRepository;
+    @Mock
+    private GoodRepository goodRepository;
     private GroupServiceImpl groupService;
+
+    private static List<Group> toGroupList(List<GroupService.GroupResponse> groupResponses) {
+        return groupResponses.stream()
+                .map(GroupResponseMapper::to)
+                .toList();
+    }
 
     @BeforeEach
     void setUp() {
-        groupService = new GroupServiceImpl(groupRepository);
+        groupService = new GroupServiceImpl(groupRepository, goodRepository);
     }
 
     @Test
@@ -36,12 +45,12 @@ class GroupServiceImplTest {
         List<Group> expectedGroups = Arrays.asList(RandomUtil.radndomGroup(), RandomUtil.radndomGroup());
         when(groupRepository.findAll()).thenReturn(expectedGroups);
 
-        List<Group> actualGroups = groupService.getGroups();
+        List<Group> actualGroups = groupService.getGroupResponses().stream()
+                .map(GroupResponseMapper::to).toList();
 
         assertEquals(expectedGroups, actualGroups);
         verify(groupRepository).findAll();
     }
-
 
     @Test
     void getById_ExistingId_ShouldReturnGroup() {
@@ -50,7 +59,7 @@ class GroupServiceImplTest {
         when(groupRepository.findById(groupId)).thenReturn(Optional.of(expectedGroup));
 
 
-        Group actualGroup = groupService.getById(groupId);
+        Group actualGroup = GroupResponseMapper.to(groupService.getGroupResponseById(groupId));
 
         assertEquals(expectedGroup, actualGroup);
         verify(groupRepository).findById(groupId);
@@ -61,28 +70,8 @@ class GroupServiceImplTest {
         String groupId = UUID.randomUUID().toString();
         when(groupRepository.findById(groupId)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> groupService.getById(groupId));
+        assertThrows(NotFoundException.class, () -> groupService.getGroupResponseById(groupId));
         verify(groupRepository).findById(groupId);
-    }
-
-    @Test
-    void create_NonExistingGroupName_ShouldCreateGroup() {
-        GroupService.GroupRequest request = new GroupService.GroupRequest();
-        request.setName(RandomUtil.randomString(10));
-        request.setDescription(RandomUtil.randomString(100));
-        when(groupRepository.existsByName(request.getName())).thenReturn(false);
-
-        Group savedGroup = RandomUtil.radndomGroup();
-        savedGroup.setName(request.getName());
-        savedGroup.setDescription(request.getDescription());
-        when(groupRepository.save(any(Group.class))).thenReturn(savedGroup);
-
-        Group createdGroup = groupService.create(request);
-
-        assertNotNull(createdGroup);
-        assertEquals(savedGroup, createdGroup);
-        verify(groupRepository).existsByName(request.getName());
-        verify(groupRepository).save(any(Group.class));
     }
 
     @Test
@@ -130,5 +119,25 @@ class GroupServiceImplTest {
         assertThrows(NotFoundException.class, () -> groupService.delete(groupId));
         verify(groupRepository).existsById(groupId);
         verify(groupRepository, never()).delete(groupId);
+    }
+
+    @Test
+    void create_NonExistingGroupName_ShouldCreateGroup() {
+        GroupService.GroupRequest request = new GroupService.GroupRequest();
+        request.setName(RandomUtil.randomString(10));
+        request.setDescription(RandomUtil.randomString(100));
+        when(groupRepository.existsByName(request.getName())).thenReturn(false);
+
+        Group savedGroup = RandomUtil.radndomGroup();
+        savedGroup.setName(request.getName());
+        savedGroup.setDescription(request.getDescription());
+        when(groupRepository.save(any(Group.class))).thenReturn(savedGroup);
+
+        Group createdGroup = GroupResponseMapper.to(groupService.create(request));
+
+        assertNotNull(createdGroup);
+        assertEquals(savedGroup, createdGroup);
+        verify(groupRepository).existsByName(request.getName());
+        verify(groupRepository).save(any(Group.class));
     }
 }

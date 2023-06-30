@@ -1,20 +1,25 @@
 package org.goodstorage.service;
 
+import lombok.Builder;
 import lombok.Data;
 import org.goodstorage.domain.Group;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface GroupService {
-    List<Group> getGroups();
+    List<GroupResponse> getGroupResponses();
 
-    List<Group> searchGroups(String expression);
+    List<GroupResponse> searchGroupResponses(String expression);
 
-    Group getById(String id);
+    GroupResponse getGroupResponseById(String id);
 
-    Group create(GroupRequest request);
+    Group getGroupById(String id);
 
-    Group update(String id, GroupRequest request);
+    GroupResponse create(GroupRequest request);
+
+    GroupResponse update(String id, GroupRequest request);
 
     void delete(String id);
 
@@ -23,5 +28,17 @@ public interface GroupService {
     class GroupRequest {
         private String name;
         private String description;
+    }
+
+    @Data
+    @Builder
+    class GroupResponse {
+        private String id;
+        private String name;
+        private String description;
+        private int productsCounts;
+        private BigDecimal productsPrice;
+        private Timestamp createdAt;
+        private Timestamp updatedAt;
     }
 }

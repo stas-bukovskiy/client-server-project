@@ -7,6 +7,8 @@ import org.goodstorage.exceptions.AlreadyExistException;
 import org.goodstorage.exceptions.DatabaseException;
 import org.goodstorage.exceptions.ResponseStatusException;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -285,6 +287,42 @@ public class GoodRepositoryImpl implements GoodRepository {
             setAutoCommit(true);
         }
     }
+
+    @Override
+    public int countProductsByGroupId(String groupId) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT SUM(quantity) FROM Good WHERE groupid = ?")) {
+            statement.setObject(1, UUID.fromString(groupId));
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            log.error("Error occurred while good quantity sum by group id <{}>:", groupId, e);
+            throw new DatabaseException(e);
+        }
+        return 0;
+    }
+
+    @Override
+    public BigDecimal sumProductsPriceByGroupId(String groupId) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT SUM(price * quantity) FROM Good WHERE groupid = ?")) {
+            statement.setObject(1, UUID.fromString(groupId));
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                BigDecimal bigDecimal = resultSet.getBigDecimal(1);
+                if (bigDecimal == null) {
+                    return BigDecimal.ZERO;
+                } else {
+                    return bigDecimal.setScale(2, RoundingMode.HALF_UP);
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Error occurred while good quantity sum by group id <{}>:", groupId, e);
+            throw new DatabaseException(e);
+        }
+        return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+    }
+
 
     private int getProductQuantity(String id) throws SQLException {
         int quantity = 0;

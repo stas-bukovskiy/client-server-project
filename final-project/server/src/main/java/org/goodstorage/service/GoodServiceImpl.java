@@ -46,7 +46,7 @@ public class GoodServiceImpl implements GoodService {
         if (goodRepository.existsByName(request.getName()))
             throw new AlreadyExistException("Good already exists with name <%s>", request.getName());
 
-        Group group = groupService.getById(request.getGroupId());
+        Group group = groupService.getGroupById(request.getGroupId());
         Good goodToSave = Good.builder()
                 .name(request.getName())
                 .description(request.getDescription())
@@ -68,7 +68,7 @@ public class GoodServiceImpl implements GoodService {
         if (goodRepository.existsByNameAndIdIsNot(request.getName(), id))
             throw new AlreadyExistException("Good already exists with name <%s>", request.getName());
 
-        Group group = groupService.getById(request.getGroupId());
+        Group group = groupService.getGroupById(request.getGroupId());
         Good goodToUpdate = getById(id);
         goodToUpdate.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         goodToUpdate.setName(request.getName());
