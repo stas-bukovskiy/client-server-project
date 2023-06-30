@@ -27,8 +27,8 @@ public interface GoodService {
 
     @Data
     class GoodRequest {
-        public String description;
         private String name;
+        private String description;
         private String producer;
         private Integer quantity;
         private Double price;

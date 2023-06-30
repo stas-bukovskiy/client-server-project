@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.Random;
+import java.util.UUID;
 
 public final class RandomUtil {
 
@@ -29,6 +30,7 @@ public final class RandomUtil {
 
     public static Group radndomGroup() {
         return Group.builder()
+                .id(UUID.randomUUID().toString())
                 .name(randomString(10))
                 .description(randomString(100))
                 .createdAt(new Timestamp(System.currentTimeMillis()))
@@ -38,6 +40,7 @@ public final class RandomUtil {
 
     public static Good randomGood(Group group) {
         return Good.builder()
+                .id(UUID.randomUUID().toString())
                 .name(randomString(10))
                 .description(randomString(100))
                 .producer(randomString(10))
@@ -54,6 +57,7 @@ public final class RandomUtil {
 
     public static Good randomGood() {
         return Good.builder()
+                .id(UUID.randomUUID().toString())
                 .name(randomString(10))
                 .description(randomString(100))
                 .producer(randomString(10))
@@ -75,6 +79,7 @@ public final class RandomUtil {
 
     public static User radnomUser() {
         return User.builder()
+                .id(UUID.randomUUID().toString())
                 .fullName(randomString(15))
                 .username(randomString(10))
                 .password(randomString(8))

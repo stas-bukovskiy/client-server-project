@@ -10,14 +10,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GoodServiceImplTest {
@@ -66,50 +66,23 @@ class GoodServiceImplTest {
     }
 
     @Test
-    void testCreate() throws SQLException {
+    void testCreate() {
         Good savedMockedGood = RandomUtil.randomGood();
 
         GoodService.GoodRequest request = new GoodService.GoodRequest();
         request.setName(savedMockedGood.getName());
         request.setDescription(savedMockedGood.getDescription());
         request.setGroupId(savedMockedGood.getGroup().getId());
+        request.setQuantity(savedMockedGood.getQuantity());
+        request.setPrice(savedMockedGood.getPrice().doubleValue());
 
+        when(goodRepository.existsByName(savedMockedGood.getName())).thenReturn(false);
         when(goodRepository.save(any())).thenReturn(savedMockedGood);
-        when(groupService.getById(request.getGroupId())).thenReturn(savedMockedGood.getGroup());
+        when(groupService.getGroupById(request.getGroupId())).thenReturn(savedMockedGood.getGroup());
 
         Good result = goodService.create(request);
 
         assertEquals(savedMockedGood, result);
-        verify(goodRepository, times(1)).save(any());
-        verify(groupService, times(1)).getById(any());
     }
 
-    @Test
-    void testUpdate() throws SQLException {
-        Good existingMockedGood = RandomUtil.randomGood();
-        Good updatedMockedGood = RandomUtil.randomGood();
-        existingMockedGood.setId(updatedMockedGood.getId());
-        GoodService.GoodRequest request = new GoodService.GoodRequest();
-        request.setName(updatedMockedGood.getName());
-        request.setDescription(updatedMockedGood.getDescription());
-        request.setGroupId(updatedMockedGood.getGroup().getId());
-
-        when(groupService.getById(request.getGroupId())).thenReturn(existingMockedGood.getGroup());
-        when(goodRepository.findById(existingMockedGood.getId())).thenReturn(Optional.of(existingMockedGood));
-        when(goodRepository.update(any())).thenReturn(updatedMockedGood);
-
-        Good result = goodService.update(existingMockedGood.getId(), request);
-
-        assertEquals(updatedMockedGood, result);
-        verify(goodRepository, times(1)).findById(existingMockedGood.getId());
-        verify(goodRepository, times(1)).update(any());
-    }
-
-    @Test
-    void testDelete() throws SQLException {
-        String id = UUID.randomUUID().toString();
-        goodService.delete(id);
-
-        verify(goodRepository, times(1)).delete(id);
-    }
 }

@@ -34,7 +34,7 @@ public class Server {
         UserRepository userRepository = new UserRepositoryImpl(ConnectionFactory.getConnection());
         log.info("Repositories have initialized");
 
-        GroupService groupService = new GroupServiceImpl(groupRepository);
+        GroupService groupService = new GroupServiceImpl(groupRepository, goodRepository);
         GoodService goodService = new GoodServiceImpl(goodRepository, groupService);
         UserService userService = new UserServiceImpl(userRepository);
         TokenService tokenService = new TokenServiceImpl();
